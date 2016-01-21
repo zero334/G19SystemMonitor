@@ -4,18 +4,16 @@
 #include <gdiplus.h>
 #include <iostream>
 #include "LogitechLCDLib.h" 
-
+#include <vector>
+#include <string>
 
 class Gui {
 
 private:
 	const TCHAR* fileName;
-	Gdiplus::Bitmap* image;
-
-	void drawGui(Gdiplus::Bitmap* image);
+	void drawGui(Gdiplus::Bitmap* image, std::vector<std::wstring> &vec);
 
 public:
 	Gui(const TCHAR* fileName);
-	~Gui();
-	bool SetColorBackgroundFromFile();
+	bool SetColorBackgroundFromFile(std::vector<std::wstring> &vec);
 };

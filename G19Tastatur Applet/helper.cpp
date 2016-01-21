@@ -1,20 +1,10 @@
 #include "helper.h"
 
-#include <string>
-
-
 Gui::Gui(const TCHAR* fileName) {
 	this->fileName = fileName;
 }
 
-Gui::~Gui() {
-	if (this->image) {
-		delete image;
-		image = NULL;
-	}
-}
-
-void Gui::drawGui(Gdiplus::Bitmap* image) {
+void Gui::drawGui(Gdiplus::Bitmap* image, std::vector<std::wstring> &vec) {
 
 	// Init graphics
 	Gdiplus::Graphics* graphics = Gdiplus::Graphics::FromImage(image);
@@ -24,16 +14,12 @@ void Gui::drawGui(Gdiplus::Bitmap* image) {
 	Gdiplus::SolidBrush redBrush(Gdiplus::Color(255, 255, 0, 0));
 	penRed.SetWidth(8);
 
-
-
 	unsigned short marginTop = 15;
 	unsigned short marginLeft = 5;
 	unsigned short horizontalBarsizeStart = marginLeft + 60;
-	unsigned short horizontalBarsizeEnd   = horizontalBarsizeStart + 100; // 100 == Max cpu load
 	
 
-
-	for (unsigned short iter = 1; iter <= 8; iter++) {
+	for (unsigned short iter = 0; iter < 8; iter++) {
 		// Draw text
 		std::wstring coreLabel = L"Core " + std::to_wstring(iter) + L':';
 		Gdiplus::Font myFont(L"Arial", 12);
@@ -41,6 +27,7 @@ void Gui::drawGui(Gdiplus::Bitmap* image) {
 		graphics->DrawString(coreLabel.c_str(), coreLabel.length(), &myFont, origin, &redBrush);
 
 		// Draw CPU lines
+		unsigned short horizontalBarsizeEnd = horizontalBarsizeStart + std::stoi(vec.at(iter)); // 100 == Max cpu load
 		graphics->DrawLine(&penRed, horizontalBarsizeStart, marginTop, horizontalBarsizeEnd, marginTop);
 
 		// Draw border
@@ -50,11 +37,11 @@ void Gui::drawGui(Gdiplus::Bitmap* image) {
 		// Next element
 		marginTop += 17;
 	}
+	delete graphics;
 }
 
 
-
-bool Gui::SetColorBackgroundFromFile() {
+bool Gui::SetColorBackgroundFromFile(std::vector<std::wstring> &vec) {
 
 	Gdiplus::GdiplusStartupInput gdiplusStartupInput;
 	ULONG_PTR gdiplusToken;
@@ -71,17 +58,15 @@ bool Gui::SetColorBackgroundFromFile() {
 	}
 
 	// Draw the gui
-	drawGui(image);
-
+	this->drawGui(image, vec);
 
 	// Get the bitmap handle
 	HBITMAP hBitmap = NULL;
 	Gdiplus::Status status = image->GetHBITMAP(RGB(0, 0, 0), &hBitmap);
 	if (status != Gdiplus::Ok) {
+		DeleteObject(hBitmap);
 		return false;
 	}
-
-
 
 	BITMAPINFO bitmapInfo = { 0 };
 	bitmapInfo.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
@@ -106,13 +91,15 @@ bool Gui::SetColorBackgroundFromFile() {
 		&byteBitmap,
 		(BITMAPINFO *)&bitmapInfo, DIB_RGB_COLORS);
 
-	LogiLcdColorSetBackground(byteBitmap);
+	LogiLcdColorSetBackground(byteBitmap); // Send image to LCD
 
 	// delete the image when done 
 	if (image) {
 		delete image;
 		image = NULL;
+		Gdiplus::GdiplusShutdown(gdiplusToken);
 	}
-
+	ReleaseDC(NULL, hdc);
+	DeleteObject(hBitmap);
 	return true;
 }

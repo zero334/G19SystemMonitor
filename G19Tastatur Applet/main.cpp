@@ -25,7 +25,7 @@ int main() {
 
 			// Init background
 			Gui g19LcdBackground(backgroundPicturePath);
-			bool backgroundPictureSuccess = g19LcdBackground.SetColorBackgroundFromFile();
+			bool backgroundPictureSuccess = true; 
 				if (backgroundPictureSuccess) {
 				
 				LogiLcdUpdate();
@@ -34,13 +34,16 @@ int main() {
 				
 				while (true) {
 					vec = getCpuLoadInfo(coreNumber);
-					for (unsigned short iter = 0; iter < vec.size(); iter++) {
-						vec.at(iter).insert(0, L"Core " + std::to_wstring(iter) + L": ") += L"%"; // TODO!
+					g19LcdBackground.SetColorBackgroundFromFile(vec);
 
-						wchar_t* wc = const_cast<wchar_t*>(vec[iter].c_str());
-						// LogiLcdColorSetText(iter, wc, 255, 0, 0);
-					}
+					//for (unsigned short iter = 0; iter < vec.size(); iter++) {
+					//	vec.at(iter).insert(0, L"Core " + std::to_wstring(iter) + L": ") += L"%"; // TODO!
+
+					//	wchar_t* wc = const_cast<wchar_t*>(vec[iter].c_str());
+					//	// LogiLcdColorSetText(iter, wc, 255, 0, 0);
+					//}
 					LogiLcdUpdate();
+					
 					Sleep(1000); // 1 Sekunde
 				}
 
