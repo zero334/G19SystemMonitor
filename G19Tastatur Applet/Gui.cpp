@@ -1,4 +1,4 @@
-#include "helper.h"
+#include "Gui.h"
 
 Gui::Gui(const TCHAR* fileName) {
 	this->fileName = fileName;

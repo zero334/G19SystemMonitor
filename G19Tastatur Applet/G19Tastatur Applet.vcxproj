@@ -86,13 +86,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="hardware.cpp" />
-    <ClCompile Include="helper.cpp" />
+    <ClCompile Include="Gui.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="config.h" />
     <ClInclude Include="hardware.h" />
-    <ClInclude Include="helper.h" />
+    <ClInclude Include="Gui.h" />
     <ClInclude Include="LogitechLCDLib.h" />
   </ItemGroup>
   <ItemGroup>

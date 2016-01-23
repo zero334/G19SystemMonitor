@@ -18,10 +18,10 @@
     <ClCompile Include="main.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="helper.cpp">
+    <ClCompile Include="hardware.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="hardware.cpp">
+    <ClCompile Include="Gui.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>
@@ -29,13 +29,13 @@
     <ClInclude Include="LogitechLCDLib.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="helper.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
     <ClInclude Include="config.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="hardware.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="Gui.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

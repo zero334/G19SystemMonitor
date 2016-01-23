@@ -4,7 +4,7 @@
 #include <thread>
 
 #include "LogitechLCDLib.h" 
-#include "helper.h"
+#include "Gui.h"
 #include "config.h"
 #include "hardware.h"
 #pragma comment(lib, "gdiplus.lib")
