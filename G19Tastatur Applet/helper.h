@@ -11,9 +11,10 @@ class Gui {
 
 private:
 	const TCHAR* fileName;
+	unsigned int coreNumber;
 	void drawGui(Gdiplus::Bitmap* image, std::vector<std::wstring> &vec);
 
 public:
-	Gui(const TCHAR* fileName);
+	Gui(const TCHAR* fileName, const unsigned int &coreNumber);
 	bool SetColorBackgroundFromFile(std::vector<std::wstring> &vec);
 };

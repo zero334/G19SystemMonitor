@@ -26,9 +26,10 @@ int main() {
 			}
 
 			// Init background
-			Gui g19LcdBackground(backgroundPicturePath);
+			Gui g19LcdBackground(backgroundPicturePath, coreNumber);
+
 			while (true) {
-				g19LcdBackground.SetColorBackgroundFromFile( getCpuLoadInfo(coreNumber) );
+				g19LcdBackground.SetColorBackgroundFromFile( getCpuLoadInfo(coreNumber) ); // TODO Check return value!
 
 				LogiLcdUpdate();
 				Sleep(1000);
