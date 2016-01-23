@@ -1,13 +1,10 @@
 #include "hardware.h"
 
-#define _WIN32_DCOM
 #include <iostream>
 #include <comdef.h>
 #include <Wbemidl.h>
-#include <vector>
 #pragma comment(lib, "wbemuuid.lib")
 
-using namespace std;
 std::vector<std::wstring> getCpuLoadInfo(const unsigned int& coreNumber) {
 
 	// Step 1: --------------------------------------------------
@@ -15,7 +12,7 @@ std::vector<std::wstring> getCpuLoadInfo(const unsigned int& coreNumber) {
 
 	HRESULT hres = CoInitializeEx(0, COINIT_MULTITHREADED);
 	if (FAILED(hres)) {
-		cout << "Failed to initialize COM library. Error code = 0x" << hex << hres << endl;
+		std::cout << "Failed to initialize COM library. Error code = 0x" << std::hex << hres << std::endl;
 		return {};                  // Program has failed.
 	}
 
@@ -40,8 +37,7 @@ std::vector<std::wstring> getCpuLoadInfo(const unsigned int& coreNumber) {
 
 
 	if (FAILED(hres)) {
-		cout << "Failed to initialize security. Error code = 0x"
-			<< hex << hres << endl;
+		std::cout << "Failed to initialize security. Error code = 0x" << std::hex << hres << std::endl;
 		CoUninitialize();
 		return {};                   // Program has failed.
 	}
@@ -58,9 +54,7 @@ std::vector<std::wstring> getCpuLoadInfo(const unsigned int& coreNumber) {
 		IID_IWbemLocator, (LPVOID *)&pLoc);
 
 	if (FAILED(hres)) {
-		cout << "Failed to create IWbemLocator object."
-			<< " Err code = 0x"
-			<< hex << hres << endl;
+		std::cout << "Failed to create IWbemLocator object." << " Err code = 0x" << std::hex << hres << std::endl;
 		CoUninitialize();
 		return {};                // Program has failed.
 	}
@@ -85,7 +79,7 @@ std::vector<std::wstring> getCpuLoadInfo(const unsigned int& coreNumber) {
 		);
 
 	if (FAILED(hres)) {
-		cout << "Could not connect. Error code = 0x" << hex << hres << endl;
+		std::cout << "Could not connect. Error code = 0x" << std::hex << hres << std::endl;
 		pLoc->Release();
 		CoUninitialize();
 		return {};               // Program has failed.
@@ -109,8 +103,8 @@ std::vector<std::wstring> getCpuLoadInfo(const unsigned int& coreNumber) {
 		);
 
 	if (FAILED(hres)) {
-		cout << "Could not set proxy blanket. Error code = 0x"
-			<< hex << hres << endl;
+		std::cout << "Could not set proxy blanket. Error code = 0x"
+			<< std::hex << hres << std::endl;
 		pSvc->Release();
 		pLoc->Release();
 		CoUninitialize();
@@ -133,7 +127,7 @@ std::vector<std::wstring> getCpuLoadInfo(const unsigned int& coreNumber) {
 		&pEnumerator);
 
 	if (FAILED(hres)) {
-		cout << "Query for operating system name failed." << " Error code = 0x" << hex << hres << endl;
+		std::cout << "Query for operating system name failed." << " Error code = 0x" << std::hex << hres << std::endl;
 		pSvc->Release();
 		pLoc->Release();
 		CoUninitialize();
