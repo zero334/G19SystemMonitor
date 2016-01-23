@@ -17,16 +17,21 @@ int main() {
 	if (LogiLcdInit(applicationName, LOGI_LCD_TYPE_COLOR)) {
 		if (LogiLcdIsConnected(LOGI_LCD_TYPE_COLOR)) {
 
+			const unsigned int coreNumber = std::thread::hardware_concurrency();
+			if (!coreNumber) {
+				std::cout << "No CPU cores detected!" << std::endl;
+				getchar();
+				return 0;
+			}
+
 			// Init background
 			Gui g19LcdBackground(backgroundPicturePath);
-				const unsigned int coreNumber = std::thread::hardware_concurrency();
-				
-				while (true) {
-					g19LcdBackground.SetColorBackgroundFromFile( getCpuLoadInfo(coreNumber) );
+			while (true) {
+				g19LcdBackground.SetColorBackgroundFromFile( getCpuLoadInfo(coreNumber) );
 
-					LogiLcdUpdate();
-					Sleep(1000);
-				}
+				LogiLcdUpdate();
+				Sleep(1000);
+			}
 		}
 		std::cout << "No Logitech keyboard with COLOR lcd display found" << std::endl;
 		getchar();
