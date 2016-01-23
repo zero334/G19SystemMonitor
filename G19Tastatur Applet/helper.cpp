@@ -22,6 +22,7 @@ void Gui::drawGui(Gdiplus::Bitmap* image, std::vector<std::wstring> &vec) {
 	for (unsigned short iter = 0; iter < 8; iter++) {
 		// Draw text
 		std::wstring coreLabel = L"Core " + std::to_wstring(iter) + L':';
+		std::wstring coreLabel = L"Core " + std::to_wstring(1 + iter) + L':';
 		Gdiplus::Font myFont(L"Arial", 12);
 		Gdiplus::PointF origin(marginLeft, marginTop - 10);
 		graphics->DrawString(coreLabel.c_str(), coreLabel.length(), &myFont, origin, &redBrush);
