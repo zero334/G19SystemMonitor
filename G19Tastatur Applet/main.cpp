@@ -26,7 +26,7 @@ int main() {
 			}
 
 			// Init background
-			Gui g19LcdBackground(backgroundPicturePath, coreNumber);
+			Gui g19LcdBackground(backgroundPicturePath);
 
 			while (true) {
 				g19LcdBackground.SetColorBackgroundFromFile( getCpuLoadInfo(coreNumber) ); // TODO Check return value!

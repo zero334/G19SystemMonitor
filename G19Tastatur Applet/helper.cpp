@@ -1,8 +1,7 @@
 #include "helper.h"
 
-Gui::Gui(const TCHAR* fileName, const unsigned int &coreNumber) {
+Gui::Gui(const TCHAR* fileName) {
 	this->fileName = fileName;
-	this->coreNumber = coreNumber;
 }
 
 void Gui::drawGui(Gdiplus::Bitmap* image, std::vector<std::wstring> &vec) {
@@ -22,7 +21,7 @@ void Gui::drawGui(Gdiplus::Bitmap* image, std::vector<std::wstring> &vec) {
 	const unsigned char horizontalBarsizeStart = marginLeft + 60;
 	
 
-	for (unsigned short iter = 0; iter < this->coreNumber; iter++) {
+	for (unsigned short iter = 0; iter < vec.size(); iter++) {
 		// Draw text
 		std::wstring coreLabel = L"Core " + std::to_wstring(1 + iter) + L':';
 		Gdiplus::Font myFont(L"Arial", 12);
@@ -50,8 +49,6 @@ bool Gui::SetColorBackgroundFromFile(std::vector<std::wstring> &vec) {
 	ULONG_PTR gdiplusToken;
 	// Initialize GDI+.
 	Gdiplus::GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
-
-	
 
 	// Load the image. Any of the following formats are supported: BMP, GIF, JPEG, PNG, TIFF, Exif, WMF, and EMF
 	Gdiplus::Bitmap* image = Gdiplus::Bitmap::FromFile(this->fileName, false);
