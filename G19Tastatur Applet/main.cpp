@@ -21,6 +21,7 @@ int main() {
 			if (!coreNumber) {
 				std::cout << "No CPU cores detected!" << std::endl;
 				getchar();
+				LogiLcdShutdown();
 				return 0;
 			}
 
@@ -40,5 +41,6 @@ int main() {
 	}
 
 	std::cout << "Failed to initialize the SDK." << std::endl;
+	getchar();
 	return 0;
 }
