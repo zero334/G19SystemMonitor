@@ -19,24 +19,13 @@ int main() {
 
 			// Init background
 			Gui g19LcdBackground(backgroundPicturePath);
-
-				LogiLcdUpdate();
-				unsigned int coreNumber = std::thread::hardware_concurrency();
-				std::vector<std::wstring> vec;
+				const unsigned int coreNumber = std::thread::hardware_concurrency();
 				
 				while (true) {
-					vec = getCpuLoadInfo(coreNumber);
-					g19LcdBackground.SetColorBackgroundFromFile(vec);
+					g19LcdBackground.SetColorBackgroundFromFile( getCpuLoadInfo(coreNumber) );
 
-					//for (unsigned short iter = 0; iter < vec.size(); iter++) {
-					//	vec.at(iter).insert(0, L"Core " + std::to_wstring(iter) + L": ") += L"%"; // TODO!
-
-					//	wchar_t* wc = const_cast<wchar_t*>(vec[iter].c_str());
-					//	// LogiLcdColorSetText(iter, wc, 255, 0, 0);
-					//}
 					LogiLcdUpdate();
-
-					Sleep(1000); // 1 Sekunde
+					Sleep(1000);
 				}
 		}
 		std::cout << "No Logitech keyboard with COLOR lcd display found" << std::endl;

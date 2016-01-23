@@ -8,7 +8,7 @@
 #pragma comment(lib, "wbemuuid.lib")
 
 using namespace std;
-std::vector<std::wstring> getCpuLoadInfo(unsigned int& coreNumber) {
+std::vector<std::wstring> getCpuLoadInfo(const unsigned int& coreNumber) {
 
 	// Step 1: --------------------------------------------------
 	// Initialize COM. ------------------------------------------
@@ -16,7 +16,7 @@ std::vector<std::wstring> getCpuLoadInfo(unsigned int& coreNumber) {
 	HRESULT hres = CoInitializeEx(0, COINIT_MULTITHREADED);
 	if (FAILED(hres)) {
 		cout << "Failed to initialize COM library. Error code = 0x" << hex << hres << endl;
-		return{};                  // Program has failed.
+		return {};                  // Program has failed.
 	}
 
 	// Step 2: --------------------------------------------------
@@ -43,7 +43,7 @@ std::vector<std::wstring> getCpuLoadInfo(unsigned int& coreNumber) {
 		cout << "Failed to initialize security. Error code = 0x"
 			<< hex << hres << endl;
 		CoUninitialize();
-		return{};                    // Program has failed.
+		return {};                   // Program has failed.
 	}
 
 	// Step 3: ---------------------------------------------------
@@ -62,7 +62,7 @@ std::vector<std::wstring> getCpuLoadInfo(unsigned int& coreNumber) {
 			<< " Err code = 0x"
 			<< hex << hres << endl;
 		CoUninitialize();
-		return{};                 // Program has failed.
+		return {};                // Program has failed.
 	}
 
 	// Step 4: -----------------------------------------------------
@@ -88,7 +88,7 @@ std::vector<std::wstring> getCpuLoadInfo(unsigned int& coreNumber) {
 		cout << "Could not connect. Error code = 0x" << hex << hres << endl;
 		pLoc->Release();
 		CoUninitialize();
-		return{};                // Program has failed.
+		return {};               // Program has failed.
 	}
 
 	// cout << "Connected to ROOT\\CIMV2 WMI namespace" << endl;
@@ -114,7 +114,7 @@ std::vector<std::wstring> getCpuLoadInfo(unsigned int& coreNumber) {
 		pSvc->Release();
 		pLoc->Release();
 		CoUninitialize();
-		return{};               // Program has failed.
+		return {};                    // Program has failed.
 	}
 
 	// Step 6: --------------------------------------------------
@@ -137,17 +137,15 @@ std::vector<std::wstring> getCpuLoadInfo(unsigned int& coreNumber) {
 		pSvc->Release();
 		pLoc->Release();
 		CoUninitialize();
-		return{};               // Program has failed.
+		return {};               // Program has failed.
 	}
 
 	// Step 7: -------------------------------------------------
 	// Get the data from the query in step 6 -------------------
 
 	ULONG uReturn = 0;
-	unsigned int coreNum = coreNumber;
-	unsigned short iter = 1;
 	std::vector<std::wstring> back;
-	while (pEnumerator && iter <= coreNum) {
+	for (unsigned int iter = 1; pEnumerator && iter <= coreNumber; iter++) {
 		HRESULT hr = pEnumerator->Next(WBEM_INFINITE, 1, &pclsObj, &uReturn);
 
 		if (uReturn == NULL) {
@@ -160,12 +158,9 @@ std::vector<std::wstring> getCpuLoadInfo(unsigned int& coreNumber) {
 		// wcout << " CPU Usage of CPU " << iter << " : " << vtProp.bstrVal << endl;
 		back.push_back(vtProp.bstrVal);
 
+		// Cleanup
 		VariantClear(&vtProp);
-
-		//IMPORTANT!!
 		pclsObj->Release();
-
-		iter++;
 	}
 
 	// Cleanup
