@@ -19,7 +19,7 @@ int main() {
 
 			const unsigned int coreNumber = std::thread::hardware_concurrency();
 			if (!coreNumber) {
-				std::cout << "No CPU cores detected!" << std::endl;
+				std::cout << "No CPU core detected!" << std::endl;
 				getchar();
 				LogiLcdShutdown();
 				return 0;
@@ -29,7 +29,7 @@ int main() {
 			Gui g19LcdBackground(backgroundPicturePath);
 
 			while (true) {
-				g19LcdBackground.SetColorBackgroundFromFile( getCpuLoadInfo(coreNumber) ); // TODO Check return value!
+				g19LcdBackground.SetColorBackgroundFromFile( Hardware::getCpuLoadInfo(coreNumber) ); // TODO Check return value!
 
 				LogiLcdUpdate();
 				Sleep(1000);

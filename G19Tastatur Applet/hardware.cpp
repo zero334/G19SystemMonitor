@@ -5,7 +5,7 @@
 #include <Wbemidl.h>
 #pragma comment(lib, "wbemuuid.lib")
 
-std::vector<std::wstring> getCpuLoadInfo(const unsigned int& coreNumber) {
+std::vector<std::wstring> Hardware::getCpuLoadInfo(const unsigned int& coreNumber) {
 
 	// Step 1: --------------------------------------------------
 	// Initialize COM. ------------------------------------------
@@ -166,4 +166,11 @@ std::vector<std::wstring> getCpuLoadInfo(const unsigned int& coreNumber) {
 	CoUninitialize();
 
 	return back;   // Program successfully completed.
+}
+
+unsigned short Hardware::getVirtualMemoryCurrentlyUsed() {
+	MEMORYSTATUSEX statex;
+	statex.dwLength = sizeof(statex);
+	GlobalMemoryStatusEx(&statex);
+	return statex.dwMemoryLoad;
 }
