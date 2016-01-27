@@ -172,5 +172,5 @@ unsigned short Hardware::getVirtualMemoryCurrentlyUsed() {
 	MEMORYSTATUSEX statex;
 	statex.dwLength = sizeof(statex);
 	GlobalMemoryStatusEx(&statex);
-	return statex.dwMemoryLoad;
+	return static_cast<unsigned short>(statex.dwMemoryLoad);
 }

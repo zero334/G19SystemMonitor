@@ -1,4 +1,5 @@
 #include "Gui.h"
+#include "hardware.h"
 
 Gui::Gui(const TCHAR* fileName) {
 	this->fileName = fileName;
@@ -39,6 +40,36 @@ void Gui::drawGui(Gdiplus::Bitmap* image, std::vector<std::wstring> &vec) {
 		// Next element
 		marginTop += 17;
 	}
+
+
+
+	// RAM
+	marginTop = 200;
+
+	unsigned short usedRam = Hardware::getVirtualMemoryCurrentlyUsed();
+	// Draw text
+	std::wstring coreLabel = std::to_wstring(usedRam) + L"% Ram";
+	Gdiplus::Font myFont(L"Arial", 12);
+	Gdiplus::PointF origin(marginLeft, marginTop - 10);
+	graphics->DrawString(coreLabel.c_str(), coreLabel.length(), &myFont, origin, &redBrush);
+
+
+	Gdiplus::HatchBrush hatchBrush(Gdiplus::HatchStyleVertical, Gdiplus::Color(200, 0, 0, 0), Gdiplus::Color(255, 255, 0, 0));
+	penRed.SetBrush(&hatchBrush);
+	#define doubleRamBarLength 2
+
+
+
+
+	// Draw RAM line
+	unsigned short horizontalBarsizeEnd = horizontalBarsizeStart + usedRam * doubleRamBarLength;
+	graphics->DrawLine(&penRed, horizontalBarsizeStart, marginTop, horizontalBarsizeEnd, marginTop);
+
+	// Draw border
+	Gdiplus::Rect rect(horizontalBarsizeStart, marginTop - 5, 100 * doubleRamBarLength, 8);
+	graphics->DrawRectangle(&penWhite, rect);
+
+
 	delete graphics;
 }
 
