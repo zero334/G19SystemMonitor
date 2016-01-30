@@ -10,10 +10,15 @@
 class Gui {
 
 private:
-	const TCHAR* fileName;
+	Gdiplus::GdiplusStartupInput gdiplusStartupInput;
+	ULONG_PTR gdiplusToken;
+	Gdiplus::Bitmap* originalImage;
+	int originalImageWidth, originalImageHeight;
+
 	void drawGui(Gdiplus::Bitmap* image, std::vector<std::wstring> &vec);
 
 public:
 	Gui(const TCHAR* fileName);
+	~Gui();
 	bool SetColorBackgroundFromFile(std::vector<std::wstring> &vec);
 };

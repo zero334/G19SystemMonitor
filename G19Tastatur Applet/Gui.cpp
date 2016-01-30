@@ -2,7 +2,22 @@
 #include "hardware.h"
 
 Gui::Gui(const TCHAR* fileName) {
-	this->fileName = fileName;
+
+	// Initialize GDI+.
+	Gdiplus::GdiplusStartup(&this->gdiplusToken, &this->gdiplusStartupInput, NULL);
+
+	// Load the image. Any of the following formats are supported: BMP, GIF, JPEG, PNG, TIFF, Exif, WMF, and EMF
+	this->originalImage = Gdiplus::Bitmap::FromFile(fileName, false);
+	this->originalImageWidth  = this->originalImage->GetWidth();
+	this->originalImageHeight = this->originalImage->GetHeight();
+}
+
+Gui::~Gui() {
+	if (this->originalImage) {
+		delete this->originalImage;
+		this->originalImage = NULL;
+	}
+	Gdiplus::GdiplusShutdown(this->gdiplusToken);
 }
 
 void Gui::drawGui(Gdiplus::Bitmap* image, std::vector<std::wstring> &vec) {
@@ -21,7 +36,6 @@ void Gui::drawGui(Gdiplus::Bitmap* image, std::vector<std::wstring> &vec) {
 	const unsigned char marginLeft = 5;
 	const unsigned char horizontalBarsizeStart = marginLeft + 60;
 	
-
 	for (unsigned short iter = 0; iter < vec.size(); iter++) {
 		// Draw text
 		std::wstring coreLabel = L"Core " + std::to_wstring(1 + iter) + L':';
@@ -41,8 +55,6 @@ void Gui::drawGui(Gdiplus::Bitmap* image, std::vector<std::wstring> &vec) {
 		marginTop += 17;
 	}
 
-
-
 	// RAM
 	marginTop = 200;
 
@@ -57,8 +69,6 @@ void Gui::drawGui(Gdiplus::Bitmap* image, std::vector<std::wstring> &vec) {
 	Gdiplus::HatchBrush hatchBrush(Gdiplus::HatchStyleVertical, Gdiplus::Color(200, 0, 0, 0), Gdiplus::Color(255, 255, 0, 0));
 	penRed.SetBrush(&hatchBrush);
 	#define doubleRamBarLength 2
-
-
 
 
 	// Draw RAM line
@@ -76,14 +86,8 @@ void Gui::drawGui(Gdiplus::Bitmap* image, std::vector<std::wstring> &vec) {
 
 bool Gui::SetColorBackgroundFromFile(std::vector<std::wstring> &vec) {
 
-	Gdiplus::GdiplusStartupInput gdiplusStartupInput;
-	ULONG_PTR gdiplusToken;
-	// Initialize GDI+.
-	Gdiplus::GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
-
-	// Load the image. Any of the following formats are supported: BMP, GIF, JPEG, PNG, TIFF, Exif, WMF, and EMF
-	Gdiplus::Bitmap* image = Gdiplus::Bitmap::FromFile(this->fileName, false);
-
+	Gdiplus::Bitmap* image = this->originalImage->Clone(0, 0, this->originalImageWidth, this->originalImageHeight, PixelFormatDontCare);
+	
 	if (image == NULL) {
 		Gdiplus::GdiplusShutdown(gdiplusToken);
 		return false;
@@ -141,7 +145,6 @@ bool Gui::SetColorBackgroundFromFile(std::vector<std::wstring> &vec) {
 		image = NULL;
 	}
 	// General cleanup
-	Gdiplus::GdiplusShutdown(gdiplusToken);
 	ReleaseDC(NULL, hdc);
 	DeleteObject(hBitmap);
 	return true;
