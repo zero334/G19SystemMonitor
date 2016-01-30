@@ -2,6 +2,7 @@
 #include <Windows.h>
 #include <gdiplus.h>
 #include <thread>
+#include <tchar.h>
 
 #include "LogitechLCDLib.h" 
 #include "Gui.h"
@@ -13,6 +14,7 @@
 #define applicationName L"System Monitor"
 #define backgroundPicturePath L"background.jpg"
 
+// int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nCmdShow) {
 int main() {
 	if (LogiLcdInit(applicationName, LOGI_LCD_TYPE_COLOR)) {
 		if (LogiLcdIsConnected(LOGI_LCD_TYPE_COLOR)) {
