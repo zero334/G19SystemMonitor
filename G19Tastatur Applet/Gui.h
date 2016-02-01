@@ -20,5 +20,5 @@ private:
 public:
 	Gui(const TCHAR* fileName);
 	~Gui();
-	bool SetColorBackgroundFromFile(std::vector<std::wstring> &vec);
+	bool setLcdBackground(std::vector<std::wstring> &vec);
 };

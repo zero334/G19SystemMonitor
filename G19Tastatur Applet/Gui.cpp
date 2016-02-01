@@ -84,7 +84,7 @@ void Gui::drawGui(Gdiplus::Bitmap* image, std::vector<std::wstring> &vec) {
 }
 
 
-bool Gui::SetColorBackgroundFromFile(std::vector<std::wstring> &vec) {
+bool Gui::setLcdBackground(std::vector<std::wstring> &vec) {
 
 	Gdiplus::Bitmap* image = this->originalImage->Clone(0, 0, this->originalImageWidth, this->originalImageHeight, PixelFormatDontCare);
 	

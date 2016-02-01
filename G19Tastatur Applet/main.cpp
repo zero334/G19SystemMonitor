@@ -31,7 +31,7 @@ int main() {
 			Gui g19LcdBackground(backgroundPicturePath);
 
 			while (true) {
-				g19LcdBackground.SetColorBackgroundFromFile( Hardware::getCpuLoadInfo(coreNumber) ); // TODO Check return value!
+				g19LcdBackground.setLcdBackground(Hardware::getCpuLoadInfo(coreNumber)); // TODO Check return value!
 
 				LogiLcdUpdate();
 				Sleep(1000);
