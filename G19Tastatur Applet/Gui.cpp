@@ -28,27 +28,30 @@ void Gui::drawGui(Gdiplus::Bitmap* image, std::vector<std::wstring> &vec) {
 	// Create the utilitys for drawing the content
 	Gdiplus::Pen penWhite (Gdiplus::Color::White);
 	Gdiplus::Pen penRed   (Gdiplus::Color::Red);
-	Gdiplus::SolidBrush redBrush(Gdiplus::Color(255, 255, 0, 0));
 	penRed.SetWidth(8);
-
+	Gdiplus::SolidBrush redBrush(Gdiplus::Color(255, 255, 0, 0));
+	Gdiplus::Font arialFont(L"Arial", 12);
+	
 	// Set the alignment
 	unsigned char marginTop = 15;
 	const unsigned char marginLeft = 5;
 	const unsigned char horizontalBarsizeStart = marginLeft + 60;
-	
+
+	Gdiplus::PointF origin(marginLeft, 0);
+	Gdiplus::Rect rect(horizontalBarsizeStart, 0, 100, 8);
+
 	for (unsigned short iter = 0; iter < vec.size(); iter++) {
 		// Draw text
 		std::wstring coreLabel = L"Core " + std::to_wstring(1 + iter) + L':';
-		Gdiplus::Font myFont(L"Arial", 12);
-		Gdiplus::PointF origin(marginLeft, marginTop - 10);
-		graphics->DrawString(coreLabel.c_str(), coreLabel.length(), &myFont, origin, &redBrush);
+		origin.Y = marginTop - 10;
+		graphics->DrawString(coreLabel.c_str(), coreLabel.length(), &arialFont, origin, &redBrush);
 
 		// Draw CPU lines
 		unsigned short horizontalBarsizeEnd = horizontalBarsizeStart + std::stoi(vec.at(iter)); // 100 == Max cpu load
 		graphics->DrawLine(&penRed, horizontalBarsizeStart, marginTop, horizontalBarsizeEnd, marginTop);
 
 		// Draw border
-		Gdiplus::Rect rect(horizontalBarsizeStart, marginTop - 5, 100, 8);
+		rect.Y = marginTop - 5;
 		graphics->DrawRectangle(&penWhite, rect);
 
 		// Next element
@@ -56,29 +59,30 @@ void Gui::drawGui(Gdiplus::Bitmap* image, std::vector<std::wstring> &vec) {
 	}
 
 	// RAM
+
+	// Draw ram 200px lower on the screen
 	marginTop = 200;
 
 	unsigned short usedRam = Hardware::getVirtualMemoryCurrentlyUsed();
+
 	// Draw text
 	std::wstring coreLabel = std::to_wstring(usedRam) + L"% Ram";
-	Gdiplus::Font myFont(L"Arial", 12);
-	Gdiplus::PointF origin(marginLeft, marginTop - 10);
-	graphics->DrawString(coreLabel.c_str(), coreLabel.length(), &myFont, origin, &redBrush);
+	origin.Y = marginTop - 10;
+	graphics->DrawString(coreLabel.c_str(), coreLabel.length(), &arialFont, origin, &redBrush);
 
-
+	// Set a new brush
 	Gdiplus::HatchBrush hatchBrush(Gdiplus::HatchStyleVertical, Gdiplus::Color(200, 0, 0, 0), Gdiplus::Color(255, 255, 0, 0));
 	penRed.SetBrush(&hatchBrush);
-	#define doubleRamBarLength 2
-
+	#define doubleRamBarLength 2 // Double the size of the ram bar
 
 	// Draw RAM line
 	unsigned short horizontalBarsizeEnd = horizontalBarsizeStart + usedRam * doubleRamBarLength;
 	graphics->DrawLine(&penRed, horizontalBarsizeStart, marginTop, horizontalBarsizeEnd, marginTop);
 
 	// Draw border
-	Gdiplus::Rect rect(horizontalBarsizeStart, marginTop - 5, 100 * doubleRamBarLength, 8);
+	rect.Y = marginTop - 5;
+	rect.Width = 100 * doubleRamBarLength;
 	graphics->DrawRectangle(&penWhite, rect);
-
 
 	delete graphics;
 }
@@ -86,10 +90,11 @@ void Gui::drawGui(Gdiplus::Bitmap* image, std::vector<std::wstring> &vec) {
 
 bool Gui::setLcdBackground(std::vector<std::wstring> &vec) {
 
+	// Copy the original image into a new one which can be edited.
 	Gdiplus::Bitmap* image = this->originalImage->Clone(0, 0, this->originalImageWidth, this->originalImageHeight, PixelFormatDontCare);
 	
 	if (image == NULL) {
-		Gdiplus::GdiplusShutdown(gdiplusToken);
+		Gdiplus::GdiplusShutdown(this->gdiplusToken);
 		return false;
 	}
 
@@ -102,7 +107,7 @@ bool Gui::setLcdBackground(std::vector<std::wstring> &vec) {
 	if (status != Gdiplus::Ok) {
 		delete image;
 		image = NULL;
-		Gdiplus::GdiplusShutdown(gdiplusToken);
+		Gdiplus::GdiplusShutdown(this->gdiplusToken);
 		DeleteObject(hBitmap);
 		return false;
 	}
@@ -118,7 +123,7 @@ bool Gui::setLcdBackground(std::vector<std::wstring> &vec) {
 	if (LOGI_LCD_COLOR_WIDTH != bitmapInfo.bmiHeader.biWidth || LOGI_LCD_COLOR_HEIGHT != bitmapInfo.bmiHeader.biHeight) {
 		delete image;
 		image = NULL;
-		Gdiplus::GdiplusShutdown(gdiplusToken);
+		Gdiplus::GdiplusShutdown(this->gdiplusToken);
 		DeleteObject(hBitmap);
 		ReleaseDC(NULL, hdc);
 		std::cout << "Oooops. Make sure to use a 320 by 240 image for color background." << std::endl;
