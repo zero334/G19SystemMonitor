@@ -5,5 +5,5 @@ class Hardware {
 
 public:
 	static std::vector<std::wstring> getCpuLoadInfo(const unsigned int& coreNumber);
-	static unsigned short getVirtualMemoryCurrentlyUsed();
+	inline static unsigned short getVirtualMemoryCurrentlyUsed();
 };
