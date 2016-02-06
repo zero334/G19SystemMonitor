@@ -103,8 +103,7 @@ std::vector<std::wstring> Hardware::getCpuLoadInfo(const unsigned int& coreNumbe
 		);
 
 	if (FAILED(hres)) {
-		std::cout << "Could not set proxy blanket. Error code = 0x"
-			<< std::hex << hres << std::endl;
+		std::cout << "Could not set proxy blanket. Error code = 0x" << std::hex << hres << std::endl;
 		pSvc->Release();
 		pLoc->Release();
 		CoUninitialize();
