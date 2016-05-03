@@ -1,4 +1,3 @@
-#include <iostream>
 #include <Windows.h>
 #include <gdiplus.h>
 #include <thread>
@@ -16,34 +15,35 @@
 
 // int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nCmdShow) {
 int main() {
-	if (LogiLcdInit(applicationName, LOGI_LCD_TYPE_COLOR)) {
-		if (LogiLcdIsConnected(LOGI_LCD_TYPE_COLOR)) {
 
-			const unsigned int coreNumber = std::thread::hardware_concurrency();
-			if (!coreNumber) {
-				std::cout << "No CPU core detected!" << std::endl;
-				getchar();
-				LogiLcdShutdown();
-				return 0;
-			}
 
-			// Init background
-			Gui g19LcdBackground(backgroundPicturePath);
-
-			while (true) {
-				g19LcdBackground.setLcdBackground(Hardware::getCpuLoadInfo(coreNumber)); // TODO Check return value!
-
-				LogiLcdUpdate();
-				Sleep(1000);
-			}
-		}
-		std::cout << "No Logitech keyboard with COLOR lcd display found" << std::endl;
-		getchar();
+	if (!LogiLcdInit(applicationName, LOGI_LCD_TYPE_COLOR)) {
+		MessageBoxA(0, "Failed to initialize the SDK.", "Error", MB_ICONWARNING);
+		return 0;
+	}
+	
+	if (!LogiLcdIsConnected(LOGI_LCD_TYPE_COLOR)) {
+		MessageBoxA(0, "No Logitech keyboard with COLOR lcd display found", "Error", MB_ICONWARNING);
 		LogiLcdShutdown();
 		return 0;
 	}
 
-	std::cout << "Failed to initialize the SDK." << std::endl;
-	getchar();
-	return 0;
+	const unsigned int coreNumber = std::thread::hardware_concurrency();
+	if (!coreNumber) {
+		MessageBoxA(0, "No CPU core detected!", "Error", MB_ICONWARNING);
+		LogiLcdShutdown();
+		return 0;
+	}
+
+
+	// Init background
+	Gui g19LcdBackground(backgroundPicturePath);
+
+	bool lcdSuccess = true;
+	do {
+		lcdSuccess = g19LcdBackground.setLcdBackground(Hardware::getCpuLoadInfo(coreNumber));
+
+		LogiLcdUpdate();
+		Sleep(1000);
+	} while (lcdSuccess);
 }
