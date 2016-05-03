@@ -1,7 +1,14 @@
 #include "Gui.h"
 #include "hardware.h"
-
+#include <fstream>
 Gui::Gui(const TCHAR* fileName) {
+
+	// Check if file exists
+	const std::ifstream image(fileName);
+	if (!image.good()) {
+		MessageBoxA(0, "Image file does not exist!", "Error", MB_ICONWARNING);
+		exit(0);
+	}
 
 	// Initialize GDI+.
 	Gdiplus::GdiplusStartup(&this->gdiplusToken, &this->gdiplusStartupInput, NULL);
@@ -126,7 +133,7 @@ bool Gui::setLcdBackground(std::vector<std::wstring> &vec) {
 		Gdiplus::GdiplusShutdown(this->gdiplusToken);
 		DeleteObject(hBitmap);
 		ReleaseDC(NULL, hdc);
-		std::cout << "Oooops. Make sure to use a 320 by 240 image for color background." << std::endl;
+		MessageBoxA(0, "Make sure to use a 320 by 240 image.", "Image size error", MB_ICONWARNING);
 		return false;
 	}
 
