@@ -13,8 +13,12 @@
 #define applicationName L"System Monitor"
 #define backgroundPicturePath L"background.jpg"
 
-// int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nCmdShow) {
+#if _DEBUG
 int main() {
+#else
+int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nCmdShow) {
+#endif
+
 
 
 	if (!LogiLcdInit(applicationName, LOGI_LCD_TYPE_COLOR)) {

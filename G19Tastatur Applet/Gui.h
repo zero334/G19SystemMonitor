@@ -1,9 +1,8 @@
 #pragma once
-#include <Windows.h>
+#include "LogitechLCDLib.h" 
+
 #include <Windows.h>
 #include <gdiplus.h>
-#include <iostream>
-#include "LogitechLCDLib.h" 
 #include <vector>
 #include <string>
 
@@ -15,10 +14,11 @@ private:
 	Gdiplus::Bitmap* originalImage;
 	int originalImageWidth, originalImageHeight;
 
-	void drawGui(Gdiplus::Bitmap* image, std::vector<std::wstring> &vec);
+	void drawCPU(Gdiplus::Bitmap* image, std::vector<std::wstring> &vec);
+	void drawRAM(Gdiplus::Bitmap* image);
 
 public:
-	Gui(const TCHAR* fileName);
+	explicit Gui(const TCHAR* fileName);
 	~Gui();
 	bool setLcdBackground(std::vector<std::wstring> &vec);
 };
