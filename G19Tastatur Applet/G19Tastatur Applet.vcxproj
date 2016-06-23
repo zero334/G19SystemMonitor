@@ -85,12 +85,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="configReader.cpp" />
+    <ClCompile Include="drawGui.cpp" />
     <ClCompile Include="hardware.cpp" />
     <ClCompile Include="Gui.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="config.h" />
+    <ClInclude Include="Cast.h" />
+    <ClInclude Include="configReader.h" />
+    <ClInclude Include="Convert.h" />
+    <ClInclude Include="drawGui.h" />
     <ClInclude Include="hardware.h" />
     <ClInclude Include="Gui.h" />
     <ClInclude Include="LogitechLCDLib.h" />

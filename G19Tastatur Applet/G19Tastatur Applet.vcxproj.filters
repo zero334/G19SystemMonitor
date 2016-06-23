@@ -24,18 +24,33 @@
     <ClCompile Include="Gui.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="drawGui.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="configReader.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LogitechLCDLib.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="config.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="hardware.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="Gui.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="drawGui.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="configReader.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="Convert.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="Cast.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

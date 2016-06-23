@@ -1,12 +1,13 @@
 #include "Gui.h"
 #include "hardware.h"
 #include <fstream>
+
 Gui::Gui(const TCHAR* fileName) {
 
 	// Check if file exists
 	const std::ifstream image(fileName);
 	if (!image.good()) {
-		MessageBoxA(0, "Image file does not exist!", "Error", MB_ICONWARNING);
+		MessageBoxA(0, "Image file does not exist!", "Error", MB_ICONERROR);
 		exit(0);
 	}
 
@@ -27,80 +28,7 @@ Gui::~Gui() {
 	Gdiplus::GdiplusShutdown(this->gdiplusToken);
 }
 
-void Gui::drawCPU(Gdiplus::Bitmap* image, std::vector<std::wstring> &vec) {
-
-	// Init graphics
-	Gdiplus::Graphics* graphics = Gdiplus::Graphics::FromImage(image);
-
-	// Create the utilitys for drawing the content
-	const Gdiplus::Pen penWhite(Gdiplus::Color::White), penRed(Gdiplus::Color::Red, 8);
-	const Gdiplus::SolidBrush redBrush(Gdiplus::Color(255, 255, 0, 0));
-	const Gdiplus::Font arialFont(L"Arial", 12);
-	
-	// Set the alignment
-	unsigned char marginTop = 15;
-	const unsigned char marginLeft = 5;
-	const unsigned char horizontalBarsizeStart = marginLeft + 60;
-
-	Gdiplus::PointF origin(marginLeft, 0);
-	Gdiplus::Rect rect(horizontalBarsizeStart, 0, 100, 8);
-
-	for (unsigned short iter = 0; iter < vec.size(); iter++) {
-		// Draw text
-		const std::wstring coreLabel = L"Core " + std::to_wstring(1 + iter) + L':';
-		origin.Y = marginTop - 10;
-		graphics->DrawString(coreLabel.c_str(), coreLabel.length(), &arialFont, origin, &redBrush);
-
-		// Draw CPU lines
-		unsigned short horizontalBarsizeEnd = horizontalBarsizeStart + std::stoi(vec.at(iter)); // 100 == Max cpu load
-		graphics->DrawLine(&penRed, horizontalBarsizeStart, marginTop, horizontalBarsizeEnd, marginTop);
-
-		// Draw border
-		rect.Y = marginTop - 5;
-		graphics->DrawRectangle(&penWhite, rect);
-
-		// Next element
-		marginTop += 17;
-	}
-
-	delete graphics;
-}
-
-	// Draw ram 200px lower on the screen
-	marginTop = 200;
-
-	unsigned short usedRam = Hardware::getVirtualMemoryCurrentlyUsed();
-	
-	const unsigned short usedRam = Hardware::getVirtualMemoryCurrentlyUsed();
-
-	// Draw text
-	#define centerText  100 
-	const Gdiplus::PointF origin(marginLeft + centerText, marginTop);
-	const std::wstring coreLabel = std::to_wstring(usedRam) + L"% Ram";
-	graphics->DrawString(coreLabel.c_str(), coreLabel.length(), &arialFont, origin, &redBrush);
-
-	// Set a new brush
-	Gdiplus::HatchBrush hatchBrush(Gdiplus::HatchStyleVertical, Gdiplus::Color(200, 0, 0, 0), Gdiplus::Color(255, 255, 0, 0));
-	penRed.SetBrush(&hatchBrush);
-	#define doubleRamBarLength 2 // Double the size of the ram bar
-
-
-	// Draw RAM indicator
-	marginTop += 30;
-	const unsigned short horizontalBarsizeEnd = horizontalBarsizeStart + usedRam * doubleRamBarLength;
-	graphics->DrawLine(&penRed, horizontalBarsizeStart, marginTop, horizontalBarsizeEnd, marginTop);
-	
-
-	// Draw border
-	marginTop -= 5;
-	graphics->DrawRectangle(&penWhite, horizontalBarsizeStart, marginTop, 100 * doubleRamBarLength, 8);
-	
-	delete graphics;
-}
-
-
-
-bool Gui::setLcdBackground(std::vector<std::wstring> &vec) {
+bool Gui::setLcdBackground() {
 
 	// Copy the original image into a new one which can be edited.
 	Gdiplus::Bitmap* image = this->originalImage->Clone(0, 0, this->originalImageWidth, this->originalImageHeight, PixelFormatDontCare);
@@ -110,9 +38,9 @@ bool Gui::setLcdBackground(std::vector<std::wstring> &vec) {
 		return false;
 	}
 
-	// Draw the gui
-	this->drawCPU(image, vec);
-	this->drawRAM(image);
+	// Draw the GUI
+	guiDrawer.drawCPU(image);
+	guiDrawer.drawRAM(image);
 
 	// Get the bitmap handle
 	HBITMAP hBitmap = NULL;
