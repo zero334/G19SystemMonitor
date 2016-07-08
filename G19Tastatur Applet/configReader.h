@@ -29,9 +29,9 @@ public:
 
 	template <typename ValueType>
 	ValueType getValueOfKey(const std::string &key, ValueType const &defaultValue = ValueType()) const {
-		if (!keyExists(key))
+		if (!keyExists(key)) {
 			return defaultValue;
-
+		}
 		return Convert::string_to_T<ValueType>(contents.find(key)->second);
 	}
 };

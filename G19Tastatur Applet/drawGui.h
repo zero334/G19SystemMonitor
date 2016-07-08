@@ -16,9 +16,8 @@ private:
 
 	struct cpuDrawingVariables {
 
-		unsigned char marginTop;
-		unsigned char marginLeft;
-		unsigned char horizontalBarsizeStart;
+		unsigned short marginTop;
+		unsigned short marginLeft;
 
 		std::unique_ptr<Gdiplus::Font> font;
 		std::unique_ptr<Gdiplus::Pen> lineColor, borderColor;
@@ -28,6 +27,17 @@ private:
 	} cpu;
 	
 	struct ramDrawingVariables {
+
+		unsigned short marginTop;
+		unsigned short marginLeft;
+		std::unique_ptr<Gdiplus::PointF> textOrigin; // Coordinates for the text
+
+		std::unique_ptr<Gdiplus::Font> font;
+		std::unique_ptr<Gdiplus::Pen> lineColor, borderColor;
+		std::unique_ptr<Gdiplus::SolidBrush> textColor;
+		std::unique_ptr<Gdiplus::HatchBrush> hatchBrush;
+		
+
 	// TODO
 	} ram;
 

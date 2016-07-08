@@ -20,6 +20,7 @@ drawGui::drawGui() {
 		} else {
 			this->cpu.marginLeft = 0;
 		}
+
 		// Setting the elements
 		if (reader.keyExists("cpu_font")) {
 			const std::wstring font = Cast::toWstring( reader.getValueOfKey<std::string>("cpu_font") );
@@ -57,7 +58,73 @@ drawGui::drawGui() {
 		} else {
 			this->cpu.textColor = std::unique_ptr<Gdiplus::SolidBrush>(new Gdiplus::SolidBrush(Gdiplus::Color::Red));
 		}
-	}
+	} /// CPU
+
+	{ // RAM
+		// Setting margin top, margin left and the start point for the text
+		if (reader.keyExists("ram_margin_top") && reader.keyExists("ram_margin_left")) {
+			this->ram.marginTop = std::stoi(reader.getValueOfKey<std::string>("ram_margin_top"));
+			this->ram.marginLeft = std::stoi(reader.getValueOfKey<std::string>("ram_margin_left"));
+		} else {
+			this->ram.marginTop = 0;
+			this->ram.marginLeft = 0;
+		}
+
+		#define centerText  100 // Try to center the text
+		this->ram.textOrigin = std::unique_ptr<Gdiplus::PointF>(new Gdiplus::PointF(this->ram.marginLeft + centerText, this->ram.marginTop));
+
+		// Setting the elements
+		if (reader.keyExists("ram_font")) {
+			const std::wstring font = Cast::toWstring(reader.getValueOfKey<std::string>("ram_font"));
+			this->ram.font = std::unique_ptr<Gdiplus::Font>(new Gdiplus::Font(font.c_str(), 12));
+		} else {
+			this->ram.font = std::unique_ptr<Gdiplus::Font>(new Gdiplus::Font(L"Arial", 12));
+		}
+
+		if (reader.keyExists("ram_line_color_red") && reader.keyExists("ram_line_color_green") && reader.keyExists("ram_line_color_blue") &&
+			reader.keyExists("ram_line_seperator_color_red") && reader.keyExists("ram_line_seperator_color_green") && reader.keyExists("ram_line_seperator_color_blue") && reader.keyExists("ram_line_seperator_color_alpha")) {
+
+			const int lineRed = std::stoi(reader.getValueOfKey<std::string>("ram_line_color_red"));
+			const int lineGreen = std::stoi(reader.getValueOfKey<std::string>("ram_line_color_green"));
+			const int lineBlue = std::stoi(reader.getValueOfKey<std::string>("ram_line_color_blue"));
+
+			const Gdiplus::Color lineColor(lineRed, lineGreen, lineBlue);
+
+			const int lineRedSeperator = std::stoi(reader.getValueOfKey<std::string>("ram_line_seperator_color_red"));
+			const int lineGreenSeperator = std::stoi(reader.getValueOfKey<std::string>("ram_line_seperator_color_green"));
+			const int lineBlueSeperator = std::stoi(reader.getValueOfKey<std::string>("ram_line_seperator_color_blue"));
+			const int lineAlphaSeperator = std::stoi(reader.getValueOfKey<std::string>("ram_line_seperator_color_alpha"));
+
+			const Gdiplus::Color lineColorSeperator(lineAlphaSeperator, lineRedSeperator, lineGreenSeperator, lineBlueSeperator);
+
+			this->ram.lineColor = std::unique_ptr<Gdiplus::Pen>(new Gdiplus::Pen(lineColor, 8));
+			
+			this->ram.hatchBrush = std::unique_ptr<Gdiplus::HatchBrush>(new Gdiplus::HatchBrush(Gdiplus::HatchStyleVertical, lineColorSeperator, lineColor));
+			ram.lineColor->SetBrush(this->ram.hatchBrush.get());
+		} else {
+			this->ram.lineColor = std::unique_ptr<Gdiplus::Pen>(new Gdiplus::Pen(Gdiplus::Color::Red, 8));
+		}
+
+		if (reader.keyExists("ram_border_color_red") && reader.keyExists("ram_border_color_green") && reader.keyExists("ram_border_color_blue")) {
+			const int red = std::stoi(reader.getValueOfKey<std::string>("ram_border_color_red"));
+			const int green = std::stoi(reader.getValueOfKey<std::string>("ram_border_color_green"));
+			const int blue = std::stoi(reader.getValueOfKey<std::string>("ram_border_color_blue"));
+			const Gdiplus::Color textColor(red, green, blue);
+			this->ram.borderColor = std::unique_ptr<Gdiplus::Pen>(new Gdiplus::Pen(textColor));
+		} else {
+			this->ram.borderColor = std::unique_ptr<Gdiplus::Pen>(new Gdiplus::Pen(Gdiplus::Color::Red));
+		}
+
+		if (reader.keyExists("ram_text_color_red") && reader.keyExists("ram_text_color_green") && reader.keyExists("ram_text_color_blue")) {
+			const int red = std::stoi(reader.getValueOfKey<std::string>("ram_text_color_red"));
+			const int green = std::stoi(reader.getValueOfKey<std::string>("ram_text_color_green"));
+			const int blue = std::stoi(reader.getValueOfKey<std::string>("ram_text_color_blue"));
+			const Gdiplus::Color textColor(red, green, blue);
+			this->ram.textColor = std::unique_ptr<Gdiplus::SolidBrush>(new Gdiplus::SolidBrush(textColor));
+		} else {
+			this->ram.textColor = std::unique_ptr<Gdiplus::SolidBrush>(new Gdiplus::SolidBrush(Gdiplus::Color::Red));
+		}
+	} /// RAM
 }
 
 drawGui::~drawGui() {
@@ -71,9 +138,9 @@ void drawGui::drawCPU(Gdiplus::Bitmap* &image) {
 	Gdiplus::Graphics* graphics = Gdiplus::Graphics::FromImage(image);
 
 	// Set the alignment
-	unsigned char marginTop = this->cpu.marginTop;
-	const unsigned char marginLeft = this->cpu.marginLeft;
-	const unsigned char horizontalBarsizeStart = marginLeft + 60;
+	unsigned short marginTop = this->cpu.marginTop;
+	const unsigned short marginLeft = this->cpu.marginLeft;
+	const unsigned short horizontalBarsizeStart = marginLeft + 60;
 
 	Gdiplus::PointF origin(marginLeft, 0);
 	Gdiplus::Rect rect(horizontalBarsizeStart, 0, 100, 8);
@@ -106,40 +173,36 @@ void drawGui::drawRAM(Gdiplus::Bitmap* &image) {
 	// Init graphics
 	Gdiplus::Graphics* graphics = Gdiplus::Graphics::FromImage(image);
 
-	// Create the utilitys for drawing the content
-	Gdiplus::Pen penWhite(Gdiplus::Color::White), penRed(Gdiplus::Color::Red, 8);
-	const Gdiplus::SolidBrush redBrush(Gdiplus::Color(255, 255, 0, 0));
-	const Gdiplus::Font arialFont(L"Arial", 12);
 
 	// Set the alignment
-	unsigned char marginTop = 190;
-	const unsigned char marginLeft = 5;
-	const unsigned char horizontalBarsizeStart = marginLeft + 50;
+	unsigned short marginTop = this->ram.marginTop;
+	const unsigned short marginLeft = this->ram.marginLeft;
+	const unsigned short horizontalBarsizeStart = marginLeft + 50;
 
 
 	const unsigned short usedRam = Hardware::getVirtualMemoryCurrentlyUsed();
 
 	// Draw text
-#define centerText  100 
-	const Gdiplus::PointF origin(marginLeft + centerText, marginTop);
+	
 	const std::wstring coreLabel = std::to_wstring(usedRam) + L"% Ram";
-	graphics->DrawString(coreLabel.c_str(), coreLabel.length(), &arialFont, origin, &redBrush);
+	graphics->DrawString(coreLabel.c_str(), coreLabel.length(), this->ram.font.get(), *this->ram.textOrigin, this->ram.textColor.get());
 
-	// Set a new brush
-	Gdiplus::HatchBrush hatchBrush(Gdiplus::HatchStyleVertical, Gdiplus::Color(200, 0, 0, 0), Gdiplus::Color(255, 255, 0, 0));
-	penRed.SetBrush(&hatchBrush);
-#define doubleRamBarLength 2 // Double the size of the ram bar
+
+	#define doubleRamBarLength 2 // Double the size of the ram bar
 
 
 	// Draw RAM indicator
 	marginTop += 30;
 	const unsigned short horizontalBarsizeEnd = horizontalBarsizeStart + usedRam * doubleRamBarLength;
-	graphics->DrawLine(&penRed, horizontalBarsizeStart, marginTop, horizontalBarsizeEnd, marginTop);
+	graphics->DrawLine(this->ram.lineColor.get(), horizontalBarsizeStart, marginTop, horizontalBarsizeEnd, marginTop);
 
 
 	// Draw border
 	marginTop -= 5;
-	graphics->DrawRectangle(&penWhite, horizontalBarsizeStart, marginTop, 100 * doubleRamBarLength, 8);
+	graphics->DrawRectangle(this->ram.borderColor.get(), horizontalBarsizeStart, marginTop, 100 * doubleRamBarLength, 8);
+
+	delete graphics;
+}
 
 	delete graphics;
 }
