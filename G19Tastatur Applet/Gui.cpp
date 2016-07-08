@@ -41,6 +41,7 @@ bool Gui::setLcdBackground() {
 	// Draw the GUI
 	guiDrawer.drawCPU(image);
 	guiDrawer.drawRAM(image);
+	guiDrawer.drawTime(image);
 
 	// Get the bitmap handle
 	HBITMAP hBitmap = NULL;

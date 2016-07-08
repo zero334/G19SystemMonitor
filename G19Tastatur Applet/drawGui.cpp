@@ -125,6 +125,33 @@ drawGui::drawGui() {
 			this->ram.textColor = std::unique_ptr<Gdiplus::SolidBrush>(new Gdiplus::SolidBrush(Gdiplus::Color::Red));
 		}
 	} /// RAM
+
+	{ // Clock
+		if (reader.keyExists("clock_margin_top") && reader.keyExists("clock_margin_left")) {
+			this->clock.marginTop = std::stoi(reader.getValueOfKey<std::string>("clock_margin_top"));
+			this->clock.marginLeft = std::stoi(reader.getValueOfKey<std::string>("clock_margin_left"));
+		} else {
+			this->clock.marginTop = 0;
+			this->clock.marginLeft = 0;
+		}
+
+		if (reader.keyExists("clock_font")) {
+			const std::wstring font = Cast::toWstring(reader.getValueOfKey<std::string>("clock_font"));
+			this->clock.font = std::unique_ptr<Gdiplus::Font>(new Gdiplus::Font(font.c_str(), 12));
+		} else {
+			this->clock.font = std::unique_ptr<Gdiplus::Font>(new Gdiplus::Font(L"Arial", 12));
+		}
+
+		if (reader.keyExists("clock_text_color_red") && reader.keyExists("clock_text_color_green") && reader.keyExists("clock_text_color_blue")) {
+			const int red = std::stoi(reader.getValueOfKey<std::string>("clock_text_color_red"));
+			const int green = std::stoi(reader.getValueOfKey<std::string>("clock_text_color_green"));
+			const int blue = std::stoi(reader.getValueOfKey<std::string>("clock_text_color_blue"));
+			const Gdiplus::Color textColor(red, green, blue);
+			this->clock.textColor = std::unique_ptr<Gdiplus::SolidBrush>(new Gdiplus::SolidBrush(textColor));
+		} else {
+			this->clock.textColor = std::unique_ptr<Gdiplus::SolidBrush>(new Gdiplus::SolidBrush(Gdiplus::Color::Red));
+		}
+	} /// Clock
 }
 
 drawGui::~drawGui() {
@@ -179,11 +206,9 @@ void drawGui::drawRAM(Gdiplus::Bitmap* &image) {
 	const unsigned short marginLeft = this->ram.marginLeft;
 	const unsigned short horizontalBarsizeStart = marginLeft + 50;
 
-
 	const unsigned short usedRam = Hardware::getVirtualMemoryCurrentlyUsed();
 
 	// Draw text
-	
 	const std::wstring coreLabel = std::to_wstring(usedRam) + L"% Ram";
 	graphics->DrawString(coreLabel.c_str(), coreLabel.length(), this->ram.font.get(), *this->ram.textOrigin, this->ram.textColor.get());
 
@@ -203,6 +228,29 @@ void drawGui::drawRAM(Gdiplus::Bitmap* &image) {
 
 	delete graphics;
 }
+
+void drawGui::drawTime(Gdiplus::Bitmap* &image) {
+	// Init graphics
+	Gdiplus::Graphics* graphics = Gdiplus::Graphics::FromImage(image);
+
+	const time_t time_now = time(0);   // get time now
+	struct tm now;
+	localtime_s(&now, &time_now);
+
+	std::wstring hour = std::to_wstring(now.tm_hour);
+	if (hour.length() == 1) {
+		hour.insert(0, 1, L'0');
+	}
+
+	std::wstring minute = std::to_wstring(now.tm_min);
+	if (minute.length() == 1) {
+		minute.insert(0, 1, L'0');
+	}
+
+	const std::wstring time = hour + L':' + minute;
+    const Gdiplus::PointF origin(this->clock.marginTop, this->clock.marginLeft);
+
+	graphics->DrawString(time.c_str(), time.length(), this->clock.font.get(), origin, this->clock.textColor.get());
 
 	delete graphics;
 }
