@@ -59,4 +59,9 @@
       <Filter>Ressourcendateien</Filter>
     </Library>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="config.cfg">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+  </ItemGroup>
 </Project>
