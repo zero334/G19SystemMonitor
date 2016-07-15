@@ -52,7 +52,7 @@ public:
 	drawGui();
 	~drawGui();
 
-	void drawCPU(Gdiplus::Bitmap* &image);
-	void drawRAM(Gdiplus::Bitmap* &image);
-	void drawTime(Gdiplus::Bitmap* &image);
+	void drawCPU(std::unique_ptr<Gdiplus::Graphics> &graphics);
+	void drawRAM(std::unique_ptr<Gdiplus::Graphics> &graphics);
+	void drawTime(std::unique_ptr<Gdiplus::Graphics> &graphics);
 };

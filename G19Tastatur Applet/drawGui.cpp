@@ -159,10 +159,7 @@ drawGui::~drawGui() {
 }
 
 
-void drawGui::drawCPU(Gdiplus::Bitmap* &image) {
-
-	// Init graphics
-	Gdiplus::Graphics* graphics = Gdiplus::Graphics::FromImage(image);
+void drawGui::drawCPU(std::unique_ptr<Gdiplus::Graphics> &graphics) {
 
 	// Set the alignment
 	unsigned short marginTop = this->cpu.marginTop;
@@ -191,15 +188,9 @@ void drawGui::drawCPU(Gdiplus::Bitmap* &image) {
 		// Next element
 		marginTop += 17;
 	}
-
-	delete graphics;
 }
 
-void drawGui::drawRAM(Gdiplus::Bitmap* &image) {
-
-	// Init graphics
-	Gdiplus::Graphics* graphics = Gdiplus::Graphics::FromImage(image);
-
+void drawGui::drawRAM(std::unique_ptr<Gdiplus::Graphics> &graphics) {
 
 	// Set the alignment
 	unsigned short marginTop = this->ram.marginTop;
@@ -225,13 +216,9 @@ void drawGui::drawRAM(Gdiplus::Bitmap* &image) {
 	// Draw border
 	marginTop -= 5;
 	graphics->DrawRectangle(this->ram.borderColor.get(), horizontalBarsizeStart, marginTop, 100 * doubleRamBarLength, 8);
-
-	delete graphics;
 }
 
-void drawGui::drawTime(Gdiplus::Bitmap* &image) {
-	// Init graphics
-	Gdiplus::Graphics* graphics = Gdiplus::Graphics::FromImage(image);
+void drawGui::drawTime(std::unique_ptr<Gdiplus::Graphics> &graphics) {
 
 	const time_t time_now = time(0);   // get time now
 	struct tm now;
@@ -252,5 +239,4 @@ void drawGui::drawTime(Gdiplus::Bitmap* &image) {
 
 	graphics->DrawString(time.c_str(), time.length(), this->clock.font.get(), origin, this->clock.textColor.get());
 
-	delete graphics;
 }

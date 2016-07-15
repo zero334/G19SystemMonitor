@@ -31,24 +31,24 @@ Gui::~Gui() {
 bool Gui::setLcdBackground() {
 
 	// Copy the original image into a new one which can be edited.
-	Gdiplus::Bitmap* image = this->originalImage->Clone(0, 0, this->originalImageWidth, this->originalImageHeight, PixelFormatDontCare);
-	
+	std::unique_ptr<Gdiplus::Bitmap> image(this->originalImage->Clone(0, 0, this->originalImageWidth, this->originalImageHeight, PixelFormatDontCare));
+
 	if (image == NULL) {
 		Gdiplus::GdiplusShutdown(this->gdiplusToken);
 		return false;
 	}
 
-	// Draw the GUI
-	guiDrawer.drawCPU(image);
-	guiDrawer.drawRAM(image);
-	guiDrawer.drawTime(image);
+	// Draw the GUI elements
+	std::unique_ptr<Gdiplus::Graphics> graphics(Gdiplus::Graphics::FromImage(image.get()));
+	this->guiDrawer.drawCPU(graphics);
+	this->guiDrawer.drawRAM(graphics);
+	this->guiDrawer.drawTime(graphics);
+	
 
 	// Get the bitmap handle
 	HBITMAP hBitmap = NULL;
 	Gdiplus::Status status = image->GetHBITMAP(RGB(0, 0, 0), &hBitmap);
 	if (status != Gdiplus::Ok) {
-		delete image;
-		image = NULL;
 		Gdiplus::GdiplusShutdown(this->gdiplusToken);
 		DeleteObject(hBitmap);
 		return false;
@@ -63,8 +63,6 @@ bool Gui::setLcdBackground() {
 	int ret = GetDIBits(hdc, hBitmap, 0, 0, NULL, &bitmapInfo, DIB_RGB_COLORS);
 
 	if (LOGI_LCD_COLOR_WIDTH != bitmapInfo.bmiHeader.biWidth || LOGI_LCD_COLOR_HEIGHT != bitmapInfo.bmiHeader.biHeight) {
-		delete image;
-		image = NULL;
 		Gdiplus::GdiplusShutdown(this->gdiplusToken);
 		DeleteObject(hBitmap);
 		ReleaseDC(NULL, hdc);
@@ -86,12 +84,8 @@ bool Gui::setLcdBackground() {
 
 	LogiLcdColorSetBackground(byteBitmap); // Send image to LCD
 
-	// Delete the image when done 
-	if (image) {
-		delete image;
-		image = NULL;
-	}
-	// General cleanup
+
+	// Cleanup
 	ReleaseDC(NULL, hdc);
 	DeleteObject(hBitmap);
 	return true;
