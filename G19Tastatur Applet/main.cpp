@@ -24,9 +24,20 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
 	}
 	
 	if (!LogiLcdIsConnected(LOGI_LCD_TYPE_COLOR)) {
-		MessageBoxA(0, "No Logitech keyboard with COLOR lcd display found", "Error", MB_ICONERROR);
-		LogiLcdShutdown();
-		return 0;
+		// Try it again a few times
+		bool logiLcdIsConnected = false;
+		for (unsigned short i = 1; i <= 10; ++i) {
+			std::this_thread::sleep_for(std::chrono::seconds(1));
+			if (LogiLcdIsConnected(LOGI_LCD_TYPE_COLOR)) {
+				logiLcdIsConnected = true;
+				break;
+			}	
+		}
+		if (!logiLcdIsConnected) {
+			MessageBoxA(0, "No Logitech keyboard with COLOR lcd display found", "Error", MB_ICONERROR);
+			LogiLcdShutdown();
+			return 0;
+		}
 	}
 
 	if (!std::thread::hardware_concurrency()) {
