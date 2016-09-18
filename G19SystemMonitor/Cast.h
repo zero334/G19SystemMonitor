@@ -4,7 +4,7 @@
 
 class Cast {
 public:
-	static std::wstring toWstring(std::string s) {
+	static std::wstring toWstring(const std::string &s) {
 		return std::wstring(s.begin(), s.end());
 	}
 };
