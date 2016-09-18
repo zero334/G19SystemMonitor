@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Headerdateien\Startup check">
+      <UniqueIdentifier>{cf3f6090-9543-416f-a51c-d14d95264253}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\Startup check">
+      <UniqueIdentifier>{851253d7-51a6-462a-8972-631db709fcac}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -29,6 +35,12 @@
     </ClCompile>
     <ClCompile Include="hardware.cpp">
       <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="hardwareCheck.cpp">
+      <Filter>Quelldateien\Startup check</Filter>
+    </ClCompile>
+    <ClCompile Include="initializeLcd.cpp">
+      <Filter>Quelldateien\Startup check</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -52,6 +64,12 @@
     </ClInclude>
     <ClInclude Include="LogitechLCDLib.h">
       <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="hardwareCheck.h">
+      <Filter>Headerdateien\Startup check</Filter>
+    </ClInclude>
+    <ClInclude Include="initializeLcd.h">
+      <Filter>Headerdateien\Startup check</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

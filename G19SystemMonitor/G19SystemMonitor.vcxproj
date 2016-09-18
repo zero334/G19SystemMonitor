@@ -125,7 +125,7 @@
       <SDLCheck>true</SDLCheck>
       <FavorSizeOrSpeed>Size</FavorSizeOrSpeed>
       <StringPooling>true</StringPooling>
-      <DebugInformationFormat>None</DebugInformationFormat>
+      <DebugInformationFormat>OldStyle</DebugInformationFormat>
       <PrecompiledHeaderFile />
     </ClCompile>
     <Link>
@@ -159,6 +159,8 @@
     <ClCompile Include="drawGui.cpp" />
     <ClCompile Include="Gui.cpp" />
     <ClCompile Include="hardware.cpp" />
+    <ClCompile Include="hardwareCheck.cpp" />
+    <ClCompile Include="initializeLcd.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -168,6 +170,8 @@
     <ClInclude Include="drawGui.h" />
     <ClInclude Include="Gui.h" />
     <ClInclude Include="hardware.h" />
+    <ClInclude Include="hardwareCheck.h" />
+    <ClInclude Include="initializeLcd.h" />
     <ClInclude Include="LogitechLCDLib.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
