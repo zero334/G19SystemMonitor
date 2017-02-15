@@ -12,7 +12,7 @@ Gui::Gui(const TCHAR* fileName) {
 	}
 
 	// Initialize GDI+.
-	Gdiplus::GdiplusStartup(&this->gdiplusToken, &this->gdiplusStartupInput, NULL);
+	Gdiplus::GdiplusStartup(&this->gdiplusToken, &this->gdiplusStartupInput, nullptr);
 
 	// Load the image. Any of the following formats are supported: BMP, GIF, JPEG, PNG, TIFF, Exif, WMF, and EMF
 	this->originalImage = Gdiplus::Bitmap::FromFile(fileName, false);
@@ -23,7 +23,7 @@ Gui::Gui(const TCHAR* fileName) {
 Gui::~Gui() {
 	if (this->originalImage) {
 		delete this->originalImage;
-		this->originalImage = NULL;
+		this->originalImage = nullptr;
 	}
 	Gdiplus::GdiplusShutdown(this->gdiplusToken);
 }
@@ -33,7 +33,7 @@ bool Gui::setLcdBackground() {
 	// Copy the original image into a new one which can be edited.
 	std::unique_ptr<Gdiplus::Bitmap> image(this->originalImage->Clone(0, 0, this->originalImageWidth, this->originalImageHeight, PixelFormatDontCare));
 
-	if (image == NULL) {
+	if (image == nullptr) {
 		Gdiplus::GdiplusShutdown(this->gdiplusToken);
 		return false;
 	}
@@ -46,8 +46,8 @@ bool Gui::setLcdBackground() {
 	
 
 	// Get the bitmap handle
-	HBITMAP hBitmap = NULL;
-	Gdiplus::Status status = image->GetHBITMAP(RGB(0, 0, 0), &hBitmap);
+	HBITMAP hBitmap = nullptr;
+	const Gdiplus::Status status = image->GetHBITMAP(RGB(0, 0, 0), &hBitmap);
 	if (status != Gdiplus::Ok) {
 		Gdiplus::GdiplusShutdown(this->gdiplusToken);
 		DeleteObject(hBitmap);
@@ -57,15 +57,15 @@ bool Gui::setLcdBackground() {
 	BITMAPINFO bitmapInfo = { 0 };
 	bitmapInfo.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
 
-	HDC hdc = GetDC(NULL);
+	HDC hdc = GetDC(nullptr);
 
 	// Check what we got
-	int ret = GetDIBits(hdc, hBitmap, 0, 0, NULL, &bitmapInfo, DIB_RGB_COLORS);
+	int ret = GetDIBits(hdc, hBitmap, 0, 0, nullptr, &bitmapInfo, DIB_RGB_COLORS);
 
 	if (LOGI_LCD_COLOR_WIDTH != bitmapInfo.bmiHeader.biWidth || LOGI_LCD_COLOR_HEIGHT != bitmapInfo.bmiHeader.biHeight) {
 		Gdiplus::GdiplusShutdown(this->gdiplusToken);
 		DeleteObject(hBitmap);
-		ReleaseDC(NULL, hdc);
+		ReleaseDC(nullptr, hdc);
 		MessageBoxA(0, "Make sure to use a 320 by 240 image.", "Image size error", MB_ICONWARNING);
 		return false;
 	}
@@ -86,7 +86,7 @@ bool Gui::setLcdBackground() {
 
 
 	// Cleanup
-	ReleaseDC(NULL, hdc);
+	ReleaseDC(nullptr, hdc);
 	DeleteObject(hBitmap);
 	return true;
 }

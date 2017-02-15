@@ -13,7 +13,7 @@ private:
 	const Gdiplus::GdiplusStartupInput gdiplusStartupInput;
 	ULONG_PTR gdiplusToken;
 	Gdiplus::Bitmap* originalImage;
-	int originalImageWidth, originalImageHeight;
+	unsigned short originalImageWidth, originalImageHeight;
 
 	drawGui guiDrawer;
 

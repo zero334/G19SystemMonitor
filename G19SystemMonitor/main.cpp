@@ -19,7 +19,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmd
 		return 0;
 	}
 
-	const HardwareCheck hCheck;
+	const HardwareCheck hCheck = HardwareCheck();
 	if (!hCheck.hardwareDetectionIsWorking()) { // Output only a warning. User may not want to use the not working feature.
 		MessageBoxA(0, "Error getting the hardware information for all program features!\n"
 					   "Some features may not work.", "Warning", MB_ICONWARNING);

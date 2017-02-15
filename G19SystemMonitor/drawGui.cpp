@@ -5,7 +5,7 @@
 
 drawGui::drawGui() {
 
-	Gdiplus::GdiplusStartup(&this->gdiplusToken, &this->gdiplusStartupInput, NULL);
+	Gdiplus::GdiplusStartup(&this->gdiplusToken, &this->gdiplusStartupInput, nullptr);
 	const ConfigReader reader("config.cfg");
 	{ // CPU
 		// Setting margin top & margin left
@@ -171,7 +171,7 @@ void drawGui::drawCPU(std::unique_ptr<Gdiplus::Graphics> &graphics) {
 
 	const std::vector<std::wstring> cpuLoad = Hardware::getCpuLoadInfo(this->cpu.coreNumber);
 
-	for (unsigned short iter = 0; iter < cpuLoad.size(); iter++) {
+	for (unsigned short iter = 0; iter < cpuLoad.size(); ++iter) {
 		// Draw text
 		const std::wstring coreLabel = L"Core " + std::to_wstring(1 + iter) + L':';
 		origin.Y = marginTop - 10;
@@ -238,5 +238,4 @@ void drawGui::drawTime(std::unique_ptr<Gdiplus::Graphics> &graphics) {
     const Gdiplus::PointF origin(this->clock.marginTop, this->clock.marginLeft);
 
 	graphics->DrawString(time.c_str(), time.length(), this->clock.font.get(), origin, this->clock.textColor.get());
-
 }

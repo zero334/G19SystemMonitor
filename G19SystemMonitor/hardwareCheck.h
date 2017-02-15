@@ -8,12 +8,12 @@ public:
 	bool hardwareDetectionIsWorking() const;
 
 private:
+
 	bool hardwareIsWorking;
+
+	bool testHardware() const;
 
 	bool checkCpuCoreNumber() const;
 	bool checkCpuLoad() const;
-
 	bool checkRam() const;
-
-	bool testHardware() const;
 };

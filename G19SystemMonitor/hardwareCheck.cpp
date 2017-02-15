@@ -12,7 +12,9 @@ bool HardwareCheck::hardwareDetectionIsWorking() const {
 	return hardwareIsWorking;
 }
 
-
+bool HardwareCheck::testHardware() const {
+	return checkCpuCoreNumber() && checkCpuLoad() && checkRam();
+}
 
 bool HardwareCheck::checkCpuCoreNumber() const {
 	if (!std::thread::hardware_concurrency()) {
@@ -36,8 +38,4 @@ bool HardwareCheck::checkRam() const {
 		return false;
 	}
 	return true;
-}
-
-bool HardwareCheck::testHardware() const {
-	return checkCpuCoreNumber() && checkCpuLoad() && checkRam();
 }
