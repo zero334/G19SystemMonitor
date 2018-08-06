@@ -1,6 +1,8 @@
 # A system monitor applet for the Logitech G19 & G19s
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/90451001b66c46a3a608d519e5cdefc2)](https://app.codacy.com/app/zero334/G19SystemMonitor?utm_source=github.com&utm_medium=referral&utm_content=zero334/G19SystemMonitor&utm_campaign=badger)
+[![GitHub issues](https://img.shields.io/github/issues/zero334/G19SystemMonitor.svg)](https://github.com/zero334/G19SystemMonitor/issues)
+[![GitHub license](https://img.shields.io/github/license/zero334/G19SystemMonitor.svg?style=popout)](https://github.com/zero334/G19SystemMonitor)
 
 ## How to use ##
 
