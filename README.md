@@ -18,8 +18,10 @@
 
 ## Features ##
 
-&rightarrow; Capable of showing the load of 1-x of your CPU cores  
-&rightarrow; ads
+&rightarrow; Capable of showing the load of all of your CPU cores (as many as fit on the screen)  
+&rightarrow; Show the current amount of RAM used in percent  
+&rightarrow; Show the current time  
+&rightarrow; High performance (used less than 0.1% of the CPU time).
 
 
 ## How to use ##
