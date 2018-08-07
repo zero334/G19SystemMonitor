@@ -57,33 +57,31 @@ bool Gui::setLcdBackground() {
 	BITMAPINFO bitmapInfo = { 0 };
 	bitmapInfo.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
 
-	HDC hdc = GetDC(nullptr);
+	const HDC hdc = GetDC(nullptr);
+	
+	if (GetDIBits(hdc, hBitmap, 0, 0, nullptr, &bitmapInfo, DIB_RGB_COLORS) != 0) {
 
-	// Check what we got
-	int ret = GetDIBits(hdc, hBitmap, 0, 0, nullptr, &bitmapInfo, DIB_RGB_COLORS);
+		if (LOGI_LCD_COLOR_WIDTH != bitmapInfo.bmiHeader.biWidth || LOGI_LCD_COLOR_HEIGHT != bitmapInfo.bmiHeader.biHeight) {
+			Gdiplus::GdiplusShutdown(this->gdiplusToken);
+			DeleteObject(hBitmap);
+			ReleaseDC(nullptr, hdc);
+			MessageBoxA(0, "Make sure to use a 320 by 240 image.", "Image size error", MB_ICONWARNING);
+			return false;
+		}
 
-	if (LOGI_LCD_COLOR_WIDTH != bitmapInfo.bmiHeader.biWidth || LOGI_LCD_COLOR_HEIGHT != bitmapInfo.bmiHeader.biHeight) {
-		Gdiplus::GdiplusShutdown(this->gdiplusToken);
-		DeleteObject(hBitmap);
-		ReleaseDC(nullptr, hdc);
-		MessageBoxA(0, "Make sure to use a 320 by 240 image.", "Image size error", MB_ICONWARNING);
-		return false;
+		bitmapInfo.bmiHeader.biCompression = BI_RGB;
+		bitmapInfo.bmiHeader.biHeight = -bitmapInfo.bmiHeader.biHeight; // This value needs to be inverted, or else image will show up upside/down
+
+		BYTE byteBitmap[LOGI_LCD_COLOR_WIDTH * LOGI_LCD_COLOR_HEIGHT * 4]; // We have 32 bits per pixel, or 4 bytes
+
+		// Gets the "bits" from the bitmap and copies them into a buffer which is pointed to by byteBitmap.
+		if (GetDIBits(hdc, hBitmap, 0,
+									-bitmapInfo.bmiHeader.biHeight, // Height here needs to be positive. Since we made it negative previously, let's reverse it again.
+									&byteBitmap, (BITMAPINFO *)&bitmapInfo, DIB_RGB_COLORS) != 0) {
+			// Send image to LCD
+			LogiLcdColorSetBackground(byteBitmap);
+		}
 	}
-
-	bitmapInfo.bmiHeader.biCompression = BI_RGB;
-	bitmapInfo.bmiHeader.biHeight = -bitmapInfo.bmiHeader.biHeight; // this value needs to be inverted, or else image will show up upside/down
-
-	BYTE byteBitmap[LOGI_LCD_COLOR_WIDTH * LOGI_LCD_COLOR_HEIGHT * 4]; // we have 32 bits per pixel, or 4 bytes
-
-	// Gets the "bits" from the bitmap and copies them into a buffer 
-	// which is pointed to by byteBitmap.
-	ret = GetDIBits(hdc, hBitmap, 0,
-		-bitmapInfo.bmiHeader.biHeight, // height here needs to be positive. Since we made it negative previously, let's reverse it again.
-		&byteBitmap,
-		(BITMAPINFO *)&bitmapInfo, DIB_RGB_COLORS);
-
-	LogiLcdColorSetBackground(byteBitmap); // Send image to LCD
-
 
 	// Cleanup
 	ReleaseDC(nullptr, hdc);

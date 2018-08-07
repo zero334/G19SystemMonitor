@@ -97,8 +97,7 @@ void ConfigReader::ExtractKeys() {
 	file.close();
 }
 
-ConfigReader::ConfigReader(const std::string &fName) {
-	this->fName = fName;
+ConfigReader::ConfigReader(const std::string &fName) : fName(fName) {
 	ExtractKeys();
 }
 
