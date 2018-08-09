@@ -70,8 +70,8 @@ drawGui::drawGui() {
 			this->ram.marginLeft = 0;
 		}
 
-		#define centerText  100 // Try to center the text
-		this->ram.textOrigin = std::unique_ptr<Gdiplus::PointF>(new Gdiplus::PointF(this->ram.marginLeft + centerText, this->ram.marginTop));
+		const unsigned short centerText = 100; // Offset to center the text
+		this->ram.textOrigin = std::unique_ptr<Gdiplus::PointF>(new Gdiplus::PointF(static_cast<Gdiplus::REAL>(this->ram.marginLeft + centerText), this->ram.marginTop));
 
 		// Setting the elements
 		if (reader.keyExists("ram_font")) {
@@ -174,7 +174,7 @@ void drawGui::drawCPU(std::unique_ptr<Gdiplus::Graphics> &graphics) {
 	for (unsigned short iter = 0; iter < cpuLoad.size(); ++iter) {
 		// Draw text
 		const std::wstring coreLabel = L"Core " + std::to_wstring(1 + iter) + L':';
-		origin.Y = marginTop - 10;
+		origin.Y = static_cast<Gdiplus::REAL>(marginTop - 10);
 		graphics->DrawString(coreLabel.c_str(), coreLabel.length(), this->cpu.font.get(), origin, this->cpu.textColor.get());
 
 		// Draw CPU lines
