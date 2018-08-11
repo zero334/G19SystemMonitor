@@ -175,6 +175,13 @@
     <ClInclude Include="hardwareCheck.h" />
     <ClInclude Include="initializeLcd.h" />
     <ClInclude Include="LogitechLCDLib.h" />
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="G19SystemMonitor.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon\icon_keyboard_256.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
