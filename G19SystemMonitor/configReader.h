@@ -23,7 +23,7 @@ private:
 	void ExtractKeys();
 
 public:
-	ConfigReader(const std::string &fName);
+	explicit ConfigReader(const std::string &fName);
 
 	bool keyExists(const std::string &key) const;
 
