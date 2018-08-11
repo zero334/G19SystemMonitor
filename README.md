@@ -18,6 +18,8 @@
 
 ## Features ##
 
+
+&rightarrow; Standalone - No additional software (like AIDA64) for reading hardware statistics required  
 &rightarrow; Capable of showing the load of all of your CPU cores (as many as fit on the screen)  
 &rightarrow; Show the current amount of RAM used in percent  
 &rightarrow; Show the current time  
