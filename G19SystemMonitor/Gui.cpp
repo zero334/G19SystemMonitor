@@ -2,10 +2,10 @@
 #include "hardware.h"
 #include <fstream>
 
-Gui::Gui(const std::wstring fileName) {
+Gui::Gui(const std::wstring &backgroundPicturePath) {
 
 	// Check if file exists
-	const std::wifstream image(fileName);
+	const std::wifstream image(backgroundPicturePath);
 	if (!image.good()) {
 		MessageBoxA(0, "Image file does not exist!", "Error", MB_ICONERROR);
 		exit(0);
@@ -15,7 +15,7 @@ Gui::Gui(const std::wstring fileName) {
 	Gdiplus::GdiplusStartup(&this->gdiplusToken, &this->gdiplusStartupInput, nullptr);
 
 	// Load the image. Any of the following formats are supported: BMP, GIF, JPEG, PNG, TIFF, Exif, WMF, and EMF
-	this->originalImage = Gdiplus::Bitmap::FromFile(fileName.c_str(), false);
+	this->originalImage = Gdiplus::Bitmap::FromFile(backgroundPicturePath.c_str(), false);
 	this->originalImageWidth  = this->originalImage->GetWidth();
 	this->originalImageHeight = this->originalImage->GetHeight();
 }

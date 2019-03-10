@@ -18,7 +18,7 @@ private:
 	drawGui guiDrawer;
 
 public:
-	explicit Gui(const std::wstring fileName);
+	explicit Gui(const std::wstring &backgroundPicturePath);
 	~Gui();
 	bool setLcdBackground();
 };
