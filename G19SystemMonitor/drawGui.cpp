@@ -2,11 +2,12 @@
 #include "hardware.h"
 #include "configReader.h"
 #include "Cast.h"
+#include "Constants.h"
 
 drawGui::drawGui() {
 
 	Gdiplus::GdiplusStartup(&this->gdiplusToken, &this->gdiplusStartupInput, nullptr);
-	const ConfigReader reader("config.cfg");
+	const ConfigReader reader(CONFIG_PATH);
 	{ // CPU
 		// Setting margin top & margin left
 		if (reader.keyExists("cpu_margin_top")) {

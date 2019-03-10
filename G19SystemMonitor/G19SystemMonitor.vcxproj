@@ -168,6 +168,7 @@
   <ItemGroup>
     <ClInclude Include="Cast.h" />
     <ClInclude Include="configReader.h" />
+    <ClInclude Include="Constants.h" />
     <ClInclude Include="Convert.h" />
     <ClInclude Include="drawGui.h" />
     <ClInclude Include="Gui.h" />

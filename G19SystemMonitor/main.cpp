@@ -5,11 +5,9 @@
 #include "Gui.h"
 #include "initializeLcd.h"
 #include "hardwareCheck.h"
+#include "Constants.h"
 
 #pragma comment(lib, "gdiplus.lib")
-
-
-#define backgroundPicturePath L"background.jpg"
 
 
 int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nCmdShow) {
@@ -26,7 +24,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmd
 	}
 
 	// Init background
-	Gui g19LcdBackground(backgroundPicturePath);
+	Gui g19LcdBackground(BACKGROUND_PICTURE_PATH);
 
 	bool lcdSuccess = true;
 	do {
