@@ -114,7 +114,7 @@ std::vector<std::wstring> Hardware::getCpuLoadInfo(const unsigned int& coreNumbe
 	// Use the IWbemServices pointer to make requests of WMI ----
 
 	// For example, get the name of the operating system
-	IEnumWbemClassObject* pEnumerator = NULL;
+	IEnumWbemClassObject *pEnumerator = NULL;
 	IWbemClassObject *pclsObj;
 
 	hres = pSvc->ExecQuery(
@@ -141,15 +141,17 @@ std::vector<std::wstring> Hardware::getCpuLoadInfo(const unsigned int& coreNumbe
 	for (unsigned int iter = 1; pEnumerator && iter <= coreNumber; iter++) {
 		HRESULT hr = pEnumerator->Next(WBEM_INFINITE, 1, &pclsObj, &uReturn);
 
-		if (uReturn == NULL) {
+		if (!SUCCEEDED(hr) || uReturn == NULL) {
 			break;
 		}
 
 		VARIANT vtProp;
 		// Get the value of the Name property
 		hr = pclsObj->Get(L"PercentProcessorTime", 0, &vtProp, 0, 0);
-		// wcout << " CPU Usage of CPU " << iter << " : " << vtProp.bstrVal << endl;
-		back.push_back(vtProp.bstrVal);
+		
+		if (SUCCEEDED(hr)) {
+			back.push_back(vtProp.bstrVal);
+		}
 
 		// Cleanup
 		VariantClear(&vtProp);
