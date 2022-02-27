@@ -145,7 +145,7 @@ std::vector<std::wstring> Hardware::getCpuLoadInfo(const unsigned int& coreNumbe
 			break;
 		}
 
-		VARIANT vtProp;
+		VARIANT vtProp{};
 		// Get the value of the Name property
 		hr = pclsObj->Get(L"PercentProcessorTime", 0, &vtProp, 0, 0);
 		
@@ -170,7 +170,7 @@ std::vector<std::wstring> Hardware::getCpuLoadInfo(const unsigned int& coreNumbe
 }
 
 unsigned short Hardware::getVirtualMemoryCurrentlyUsed() {
-	MEMORYSTATUSEX statex;
+	MEMORYSTATUSEX statex{};
 	statex.dwLength = sizeof(statex);
 	GlobalMemoryStatusEx(&statex);
 	return static_cast<unsigned short>(statex.dwMemoryLoad);

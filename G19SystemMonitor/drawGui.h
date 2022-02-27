@@ -16,8 +16,8 @@ private:
 
 	struct cpuDrawingVariables {
 
-		unsigned short marginTop;
-		unsigned short marginLeft;
+		unsigned short marginTop = 0;
+		unsigned short marginLeft = 0;
 
 		std::unique_ptr<Gdiplus::Font> font;
 		std::unique_ptr<Gdiplus::Pen> lineColor, borderColor;
@@ -28,8 +28,8 @@ private:
 	
 	struct ramDrawingVariables {
 
-		unsigned short marginTop;
-		unsigned short marginLeft;
+		unsigned short marginTop = 0;
+		unsigned short marginLeft = 0;
 		std::unique_ptr<Gdiplus::PointF> textOrigin; // Coordinates for the text
 
 		std::unique_ptr<Gdiplus::Font> font;
@@ -40,8 +40,8 @@ private:
 
 	struct clockDrawingVariables {
 
-		unsigned short marginTop;
-		unsigned short marginLeft;
+		unsigned short marginTop = 0;
+		unsigned short marginLeft = 0;
 
 		std::unique_ptr<Gdiplus::Font> font;
 		std::unique_ptr<Gdiplus::SolidBrush> textColor;

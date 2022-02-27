@@ -18,6 +18,8 @@ Gui::Gui(const std::wstring &backgroundPicturePath) {
 	this->originalImage = Gdiplus::Bitmap::FromFile(backgroundPicturePath.c_str(), false);
 	this->originalImageWidth  = this->originalImage->GetWidth();
 	this->originalImageHeight = this->originalImage->GetHeight();
+
+	byteBitmap.resize(LOGI_LCD_COLOR_WIDTH * LOGI_LCD_COLOR_HEIGHT * 4); // We have 32 bits per pixel, or 4 bytes
 }
 
 Gui::~Gui() {
@@ -72,14 +74,12 @@ bool Gui::setLcdBackground() {
 		bitmapInfo.bmiHeader.biCompression = BI_RGB;
 		bitmapInfo.bmiHeader.biHeight = -bitmapInfo.bmiHeader.biHeight; // This value needs to be inverted, or else image will show up upside/down
 
-		BYTE byteBitmap[LOGI_LCD_COLOR_WIDTH * LOGI_LCD_COLOR_HEIGHT * 4]; // We have 32 bits per pixel, or 4 bytes
-
 		// Gets the "bits" from the bitmap and copies them into a buffer which is pointed to by byteBitmap.
 		if (GetDIBits(hdc, hBitmap, 0,
 									-bitmapInfo.bmiHeader.biHeight, // Height here needs to be positive. Since we made it negative previously, let's reverse it again.
-									&byteBitmap, (BITMAPINFO *)&bitmapInfo, DIB_RGB_COLORS) != 0) {
+									byteBitmap.data(), (BITMAPINFO*)&bitmapInfo, DIB_RGB_COLORS) != 0) {
 			// Send image to LCD
-			LogiLcdColorSetBackground(byteBitmap);
+			LogiLcdColorSetBackground(byteBitmap.data());
 		}
 	}
 

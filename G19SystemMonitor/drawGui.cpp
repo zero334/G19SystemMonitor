@@ -205,7 +205,7 @@ void drawGui::drawRAM(std::unique_ptr<Gdiplus::Graphics> &graphics) {
 	graphics->DrawString(coreLabel.c_str(), coreLabel.length(), this->ram.font.get(), *this->ram.textOrigin, this->ram.textColor.get());
 
 
-	#define doubleRamBarLength 2 // Double the size of the ram bar
+	constexpr unsigned char doubleRamBarLength = 2; // Double the size of the ram bar
 
 
 	// Draw RAM indicator

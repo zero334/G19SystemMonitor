@@ -16,6 +16,7 @@ private:
 	unsigned short originalImageWidth, originalImageHeight;
 
 	drawGui guiDrawer;
+	std::vector<BYTE> byteBitmap;
 
 public:
 	explicit Gui(const std::wstring &backgroundPicturePath);
