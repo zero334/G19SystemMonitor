@@ -2,6 +2,11 @@
 #include "LogitechLCDLib.h" 
 #include <thread>
 
+InitializeLcd::InitializeLcd() {
+	// Give the logitech SDK 10 seconds to fully initialize
+	std::this_thread::sleep_for(std::chrono::seconds(10));
+}
+
 bool InitializeLcd::initKeyboard() const {
 	if (!LogiLcdInit(applicationName, LOGI_LCD_TYPE_COLOR)) {
 		MessageBoxA(0, "Failed to initialize the SDK.", "Error", MB_ICONERROR);

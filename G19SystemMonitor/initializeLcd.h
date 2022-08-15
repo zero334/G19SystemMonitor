@@ -7,5 +7,6 @@ class InitializeLcd {
 	bool connectKeyboard() const;
 
 public:
+	InitializeLcd();
 	bool isInitialized() const;
 };
